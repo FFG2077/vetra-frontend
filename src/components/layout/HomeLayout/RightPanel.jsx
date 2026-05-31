@@ -1,17 +1,18 @@
 import { useChatStore } from '../../../store/useChatStore'
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 
 const RightPanel = ({ uuid }) => {
+  // messages
   const chat_uuid = uuid?.uuid
   const chats = useChatStore((state) => state.chats)
   const addMessage = useChatStore((state) => state.addMessage)
 
   const messages = chats[chat_uuid]?.messages || []
 
+  const [message, setMessage] = useState('')
+
   const sendMessage = () => {
-    const messageInput = document.getElementById('message-input')
-    const message = messageInput.value.trim()
-    if (!message) return
+    if (!message.trim()) return
 
     addMessage(chat_uuid, {
       uuid: Date.now().toString(),
@@ -19,9 +20,10 @@ const RightPanel = ({ uuid }) => {
       user_uuid: 'user1',
       user_name: 'F.F.G.',
     })
-    messageInput.value = ''
+    setMessage('')
   }
 
+  // scroll
   const messagesRef = useRef(null)
   const shouldAutoScroll = useRef(true)
   const scrollPosition = useRef({})
@@ -60,6 +62,7 @@ const RightPanel = ({ uuid }) => {
     }
   }, [chat_uuid])
 
+
   if (chat_uuid) {
     return (
       <div className="flex flex-col h-screen bg-[#0B0C14] text-white font-sans">
@@ -90,8 +93,9 @@ const RightPanel = ({ uuid }) => {
           <div className="flex gap-3">
             <input
               type="text"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
               placeholder="Type a message..."
-              id="message-input"
               className="flex-1 bg-gray-800 text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {

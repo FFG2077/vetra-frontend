@@ -12,6 +12,10 @@ const MiddlePanel = () => {
     setContent(newText)
   }
 
+  // const [search, setSearch] = useState('')
+
+
+
   return (
     <div className="flex flex-col">
       <div>
