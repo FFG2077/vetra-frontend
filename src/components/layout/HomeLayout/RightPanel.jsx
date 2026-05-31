@@ -1,4 +1,5 @@
 import { useChatStore } from '../../../store/useChatStore'
+import { useRef, useEffect } from 'react'
 
 const RightPanel = ({ uuid }) => {
   const chat_uuid = uuid?.uuid
@@ -16,16 +17,48 @@ const RightPanel = ({ uuid }) => {
       uuid: Date.now().toString(),
       text: message,
       user_uuid: 'user1',
-      user_name: 'F.F.G.'
+      user_name: 'F.F.G.',
     })
     messageInput.value = ''
-    // addMessage(chat_uuid, {
-    //   uuid: Date.now().toString(),
-    //   text: 'asd',
-    //   user_uuid: 'user1',
-    //   user_name: 'F.F.G.'
-    // })
   }
+
+  const messagesRef = useRef(null)
+  const shouldAutoScroll = useRef(true)
+  const scrollPosition = useRef({})
+
+  const handleScroll = () => {
+    const el = messagesRef.current
+
+    if (!el) return
+
+    shouldAutoScroll.current = el.scrollHeight - el.scrollTop - el.clientHeight < 100
+
+    scrollPosition.current[chat_uuid] = el.scrollTop
+  }
+
+  useEffect(() => {
+    const el = messagesRef.current
+
+    if (!el) return
+
+    if (shouldAutoScroll.current) {
+      el.scrollTop = el.scrollHeight
+    }
+  }, [messages])
+
+  useEffect(() => {
+    const el = messagesRef.current
+
+    if (!el) return
+
+    const savedPosition = scrollPosition.current[chat_uuid]
+
+    if (savedPosition !== undefined) {
+      el.scrollTop = savedPosition
+    } else {
+      el.scrollTop = el.scrollHeight
+    }
+  }, [chat_uuid])
 
   if (chat_uuid) {
     return (
@@ -36,7 +69,11 @@ const RightPanel = ({ uuid }) => {
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 bg-[#0B0C14]">
+        <div
+          className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 bg-[#0B0C14]"
+          ref={messagesRef}
+          onScroll={handleScroll}
+        >
           <div className="flex flex-col items-start gap-4">
             {messages.map((msg) => (
               <div className="max-w-xl" key={msg.uuid}>
