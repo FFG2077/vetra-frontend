@@ -9,7 +9,7 @@ const HomeWithUuid = () => {
 }
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(true)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   return (
     <BrowserRouter>

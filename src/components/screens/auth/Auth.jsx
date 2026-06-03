@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { LoginForm } from './LoginForm'
+import { RegisterForm } from './RegisterForm'
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true)
@@ -6,35 +8,14 @@ const Auth = () => {
   return (
     <div className="auth-container">
       <div className="auth-menu">
-        <button className={`auth-btn ${isLogin ? 'active' : ''}`} onClick={() => setIsLogin(true)}>
-          Вход
-        </button>
-        <button
-          className={`auth-btn ${!isLogin ? 'active' : ''}`}
-          onClick={() => setIsLogin(false)}
-        >
-          Регистрация
-        </button>
-      </div>
+        <div className="auth-form">{isLogin ? <LoginForm /> : <RegisterForm />}</div>
 
-      <div className="auth-form">
-        {isLogin ? (
-          <form>
-            <h2>Вход в аккаунт</h2>
-            <input type="email" placeholder="Email" required />
-            <input type="password" placeholder="Пароль" required />
-            <button type="submit">Войти</button>
-          </form>
-        ) : (
-          <form>
-            <h2>Создать аккаунт</h2>
-            <input type="text" placeholder="Имя" required />
-            <input type="email" placeholder="Email" required />
-            <input type="password" placeholder="Пароль" required />
-            <input type="password" placeholder="Подтвердить пароль" required />
-            <button type="submit">Зарегистрироваться</button>
-          </form>
-        )}
+        <button
+          onClick={() => setIsLogin(!isLogin)}
+          className={`auth-btn ${!isLogin ? 'active' : ''} mx-2 bg-blue-500 text-white px-4 py-2 rounded`}
+        >
+          {isLogin ? 'Login' : 'Register'}
+        </button>
       </div>
     </div>
   )
