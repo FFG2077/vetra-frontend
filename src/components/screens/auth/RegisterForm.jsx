@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { register } from '../../../api/auth'
+import { useAuthStore } from '../../../store/useAuthStore'
 
 export const RegisterForm = ({ onSwitchForm }) => {
   const [registerData, setRegisterData] = useState({
@@ -8,8 +10,20 @@ export const RegisterForm = ({ onSwitchForm }) => {
     confirmPassword: '',
   })
 
-  const handleSubmit = (e) => {
+  const { setAccessToken } = useAuthStore()
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
+
+    try {
+      const data = await register(registerData.name, registerData.email, registerData.password)
+
+      setAccessToken(data.accessToken)
+
+      console.log('Registration successful:', data)
+    } catch (error) {
+      console.error('Error registering user:', error)
+    }
   }
 
   return (
