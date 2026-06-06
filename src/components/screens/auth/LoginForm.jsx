@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { login } from '../../../api/auth'
 import { useAuthStore } from '../../../store/useAuthStore'
 
-export const LoginForm = () => {
+export const LoginForm = ({ onSwitchForm }) => {
   const [loginData, setLoginData] = useState({
     email: '',
     password: '',
@@ -53,6 +53,16 @@ export const LoginForm = () => {
       >
         Sign in
       </button>
+      <div className="mt-4 text-center text-sm text-slate-400">
+        Don't have an account?{' '}
+        <button
+          type="button"
+          onClick={onSwitchForm}
+          className="text-sky-500 hover:text-sky-400 transition"
+        >
+          Sign up
+        </button>
+      </div>
     </form>
   )
 }
