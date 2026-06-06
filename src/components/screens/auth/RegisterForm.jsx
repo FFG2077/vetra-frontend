@@ -16,11 +16,9 @@ export const RegisterForm = ({ onSwitchForm }) => {
     e.preventDefault()
 
     try {
-      const data = await register(registerData.name, registerData.email, registerData.password)
+      const data = await register(registerData.name, registerData.email, registerData.password, registerData.confirmPassword)
 
-      setAccessToken(data.accessToken)
-
-      console.log('Registration successful:', data)
+      setAccessToken(data.access_token)
     } catch (error) {
       console.error('Error registering user:', error)
     }

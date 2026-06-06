@@ -16,9 +16,7 @@ export const LoginForm = ({ onSwitchForm }) => {
     try {
       const data = await login(loginData.email, loginData.password)
 
-      setAccessToken(data.accessToken)
-
-      console.log('Login successful:', data)
+      setAccessToken(data.access_token)
     } catch (error) {
       console.error('Error occurred while logging in:', error)
     }
