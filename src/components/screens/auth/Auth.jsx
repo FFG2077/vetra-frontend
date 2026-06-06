@@ -6,9 +6,9 @@ const Auth = () => {
   const [isLogin, setIsLogin] = useState(true)
 
   return (
-    <div className="auth-container">
-      <div className="auth-menu">
-        <div className="auth-form">
+    <div className="h-screen w-full flex items-center justify-center">
+      <div>
+        <div>
           {isLogin ? (
             <LoginForm onSwitchForm={() => setIsLogin(false)} />
           ) : (
