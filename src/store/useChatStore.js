@@ -1,16 +1,25 @@
 import { create } from 'zustand'
 
 export const useChatStore = create((set) => ({
-  chats:{},
+  chats: {},
 
   currentChat: null,
 
   setChats: (chatArray) => {
-    const map = Object.fromEntries(
-      chatArray.map((c) => [c.public_id, c])
-    )
+    const map = Object.fromEntries(chatArray.map((c) => [c.public_id, c]))
     set({ chats: map })
   },
+
+  setMessages: (chatUuid, messages) =>
+    set((state) => ({
+      chats: {
+        ...state.chats,
+        [chatUuid]: {
+          ...state.chats[chatUuid],
+          messages,
+        },
+      },
+    })),
 
   setCurrentChat: (chat) =>
     set({
@@ -27,8 +36,8 @@ export const useChatStore = create((set) => ({
           [uuid]: {
             ...chat,
             messages: [...(chat.messages || []), message],
-          }
-        }
+          },
+        },
       }
-    })
+    }),
 }))

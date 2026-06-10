@@ -1,11 +1,13 @@
 import { useChatStore } from '../../../store/useChatStore'
 import { useRef, useEffect, useState } from 'react'
+import { getMessages } from '../../../api/messages'
 
 const RightPanel = ({ uuid }) => {
   // messages
   const chat_uuid = uuid?.uuid
   const chats = useChatStore((state) => state.chats)
   const addMessage = useChatStore((state) => state.addMessage)
+  const setMessages = useChatStore((state) => state.setMessages)
 
   const messages = chats[chat_uuid]?.messages || []
 
@@ -15,9 +17,8 @@ const RightPanel = ({ uuid }) => {
     if (!message.trim()) return
 
     addMessage(chat_uuid, {
-      uuid: Date.now().toString(),
-      text: message,
-      user_uuid: 'user1',
+      public_id: Date.now().toString(),
+      content: message,
       user_name: 'F.F.G.',
     })
     setMessage('')
@@ -62,13 +63,24 @@ const RightPanel = ({ uuid }) => {
     }
   }, [chat_uuid])
 
+  useEffect(() => {
+    if (!chat_uuid) return
+
+    const loadMessages = async () => {
+      const messages = await getMessages(chat_uuid)
+
+      setMessages(chat_uuid, messages)
+    }
+
+    loadMessages()
+  }, [chat_uuid])
 
   if (chat_uuid) {
     return (
       <div className="flex flex-col h-screen bg-[#0B0C14] text-white font-sans">
         <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-700 bg-[#0B0C14]">
           <div className="flex items-center gap-3">
-            <h1 className="text-xl md:text-2xl font-semibold">{chats[chat_uuid]?.chat_name}</h1>
+            <h1 className="text-xl md:text-2xl font-semibold">{chats[chat_uuid]?.name}</h1>
           </div>
         </div>
 
@@ -79,10 +91,10 @@ const RightPanel = ({ uuid }) => {
         >
           <div className="flex flex-col items-start gap-4">
             {messages.map((msg) => (
-              <div className="max-w-xl" key={msg.uuid}>
+              <div className="max-w-xl" key={msg.public_id}>
                 <p className="text-sm font-medium text-gray-400 mb-1">{msg.user_name}</p>
                 <div className="bg-gray-800 text-white rounded-2xl px-4 py-3 shadow-sm">
-                  <p className="text-sm leading-6">{msg.text}</p>
+                  <p className="text-sm leading-6">{msg.content}</p>
                 </div>
               </div>
             ))}
