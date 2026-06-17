@@ -1,6 +1,8 @@
 import { useChatStore } from '../../../store/useChatStore'
+import { useAuthStore } from '../../../store/useAuthStore'
 import { useRef, useEffect, useState } from 'react'
 import { getMessages } from '../../../api/messages'
+import { chatSocket } from '../../../service/chatSocket'
 
 const RightPanel = ({ uuid }) => {
   // messages
@@ -16,11 +18,16 @@ const RightPanel = ({ uuid }) => {
   const sendMessage = () => {
     if (!message.trim()) return
 
-    addMessage(chat_uuid, {
+    const msg = {
       public_id: Date.now().toString(),
       content: message,
-      user_name: 'F.F.G.',
-    })
+      user_name: user_name,
+      user_uuid: user_uuid,
+    }
+
+    addMessage(chat_uuid, msg)
+
+    chatSocket.sendMessage(chat_uuid, message)
     setMessage('')
   }
 
@@ -66,6 +73,8 @@ const RightPanel = ({ uuid }) => {
   useEffect(() => {
     if (!chat_uuid) return
 
+    chatSocket.handshake(chat_uuid)
+
     const loadMessages = async () => {
       const messages = await getMessages(chat_uuid)
 
@@ -74,6 +83,10 @@ const RightPanel = ({ uuid }) => {
 
     loadMessages()
   }, [chat_uuid])
+
+  // username, user_uuid
+  const user_name = useAuthStore((state) => state.name)
+  const user_uuid = useAuthStore((state) => state.uuid)
 
   if (chat_uuid) {
     return (
