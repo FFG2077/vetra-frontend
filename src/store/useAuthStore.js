@@ -1,24 +1,28 @@
 import { create } from 'zustand'
 
-export const useAuthStore = create((set) => ({
+const TOKEN_KEY = 'access_token'
+
+export const useAuthStore = create((set, get) => ({
   uuid: null,
   name: null,
   email: null,
-  accessToken: null,
+  accessToken: localStorage.getItem(TOKEN_KEY),
 
-  setAccessToken: (accessToken) =>
-    set({ accessToken }),
+  setAccessToken: (accessToken) => {
+    localStorage.setItem(TOKEN_KEY, accessToken)
+    set({ accessToken })
+  },
 
-  setUser: ({ uuid, name, email }) =>
-    set({ uuid, name, email }),
+  setUser: ({ uuid, name, email }) => set({ uuid, name, email }),
 
-  logout: () =>
+  logout: () => {
+    localStorage.removeItem(TOKEN_KEY)
+
     set({
       uuid: null,
       name: null,
       email: null,
       accessToken: null,
     })
-
+  },
 }))
-
