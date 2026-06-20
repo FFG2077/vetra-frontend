@@ -20,11 +20,15 @@ class ChatSocket {
     }
 
     this.socket.onmessage = (event) => {
-      const msg = JSON.parse(event.data)
+      try {
+        const msg = JSON.parse(event.data)
 
-      const handler = this.listeners[msg.event]
-      if (handler) {
-        handler(msg.data)
+        const handler = this.listeners[msg.event]
+        if (handler) {
+          handler(msg.data)
+        }
+      } catch (e) {
+        console.error('WS parse error: ', e)
       }
     }
 
@@ -71,6 +75,10 @@ class ChatSocket {
 
   disconnect() {
     this.socket?.close()
+  }
+
+  off(event) {
+    delete this.listeners[event]
   }
 }
 

@@ -2,7 +2,7 @@ import { api } from './axios'
 
 export const login = async (email, password) => {
   try {
-    const response = await api.post('/users/login/', { email, password })
+    const response = await api.post('/users/login', { email, password })
 
     return response.data
 
@@ -18,7 +18,7 @@ export const register = async (name, email, password, confirmPassword) => {
 			throw new Error('Passwords do not match')
 		}
 
-    const response = await api.post('/users/registration/', { name, email, password })
+    const response = await api.post('/users/registration', { name, email, password })
 
     return response.data
 

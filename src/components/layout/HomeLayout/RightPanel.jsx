@@ -84,6 +84,23 @@ const RightPanel = ({ uuid }) => {
     loadMessages()
   }, [chat_uuid])
 
+  useEffect(() => {
+    const handler = (data) => {
+      addMessage(data.chat_uuid, {
+        public_id: Date.now().toString(),
+        content: data.content,
+        user_name: data.sender_name,
+        user_uuid: data.sender_id
+      })
+    }
+
+    chatSocket.on('message.new', handler)
+
+    return () => {
+      chatSocket.off('message.new')
+    }
+  }, [chat_uuid])
+
   // username, user_uuid
   const user_name = useAuthStore((state) => state.name)
   const user_uuid = useAuthStore((state) => state.uuid)
