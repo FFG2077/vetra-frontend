@@ -1,7 +1,21 @@
+import { useState } from 'react'
+
 import LeftLink from '../../ui/LeftLink'
 import { Link } from 'react-router-dom'
 
+import { IoSettingsOutline, IoClipboardOutline } from 'react-icons/io5'
+import { useAuthStore } from '../../../store/useAuthStore'
+
+import { copyToClipboard } from '../../../utils/copy'
+import { useSettingsStore } from '../../../store/useSettingsStore'
+
 const LeftPanel = ({ className = '' }) => {
+  const public_id = useAuthStore((state) => state.public_id)
+  const short_public_id = public_id ? public_id.slice(0, 8) : ''
+  const name = useAuthStore((state) => state.name)
+
+  const toggle = useSettingsStore((state) => state.toggle)
+
   return (
     <div className={`min-h-screen w-full md:w-40 lg:w-80 flex flex-col p-4 sm:p-2 ${className}`}>
       <Link to="/home" className="inline-flex items-center gap-2">
@@ -22,6 +36,26 @@ const LeftPanel = ({ className = '' }) => {
             </span>
           </div>
           <h3 className="text-gray-500 text-xl">Beta V0.1.0</h3>
+        </div>
+      </div>
+
+      <div className="flex mb-10 w-full bg-gray-900 rounded-2xl px-4 py-3 shadow-sm flex-col">
+        <div className="text-white flex justify-between items-center mb-1">
+          <span className="text-2xl">{name}</span>
+          <IoSettingsOutline onClick={toggle} size={24} className="cursor-pointer hover:text-gray-300" />
+        </div>
+        <div className="flex w-full justify-between">
+          <span
+            onClick={() => copyToClipboard(public_id)}
+            className="cursor-pointer hover:text-gray-300"
+          >
+            {short_public_id}...
+          </span>
+          <IoClipboardOutline
+            size={20}
+            className="cursor-pointer hover:text-gray-300"
+            onClick={() => copyToClipboard(public_id)}
+          />
         </div>
       </div>
     </div>

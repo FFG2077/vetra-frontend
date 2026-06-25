@@ -7,7 +7,7 @@ class ChatSocket {
   connect(token) {
     if (this.sokcet) return
     this.token = token
-    this.socket = new WebSocket('ws://api.vetra-messenger.local:8001/api/v1/ws')
+    this.socket = new WebSocket('ws://127.0.0.1:8000/api/v1/ws')
 
     this.socket.onopen = () => {
       this.send({

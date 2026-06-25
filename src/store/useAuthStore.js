@@ -1,28 +1,38 @@
 import { create } from 'zustand'
 
-const TOKEN_KEY = 'access_token'
+const ACCESS_TOKEN = 'access_token'
+const REFRESH_TOKEN = 'refresh_token'
 
 export const useAuthStore = create((set, get) => ({
-  uuid: null,
+  public_id: null,
   name: null,
   email: null,
-  accessToken: localStorage.getItem(TOKEN_KEY),
 
-  setAccessToken: (accessToken) => {
-    localStorage.setItem(TOKEN_KEY, accessToken)
-    set({ accessToken })
-  },
+  accessToken: localStorage.getItem(ACCESS_TOKEN),
+  refreshToken: localStorage.getItem(REFRESH_TOKEN),
 
-  setUser: ({ uuid, name, email }) => set({ uuid, name, email }),
-
-  logout: () => {
-    localStorage.removeItem(TOKEN_KEY)
+  setTokens: ({ accessToken, refreshToken }) => {
+    localStorage.setItem(ACCESS_TOKEN, accessToken)
+    localStorage.setItem(REFRESH_TOKEN, refreshToken)
 
     set({
-      uuid: null,
+      accessToken,
+      refreshToken,
+    })
+  },
+
+  setUser: ({ public_id, name, email }) => set({ public_id, name, email }),
+
+  logout: () => {
+    localStorage.removeItem(ACCESS_TOKEN)
+    localStorage.removeItem(REFRESH_TOKEN)
+
+    set({
+      public_id: null,
       name: null,
       email: null,
       accessToken: null,
+      refreshToken: null,
     })
   },
 }))

@@ -4,6 +4,7 @@ import Auth from './components/screens/auth/Auth'
 import Home from './components/screens/home/Home'
 import { useAuthStore } from './store/useAuthStore'
 import { chatSocket } from './service/chatSocket'
+import { Toaster } from 'react-hot-toast'
 
 const HomeWithUuid = () => {
   const { uuid } = useParams()
@@ -22,20 +23,51 @@ const App = () => {
   }, [accessToken])
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={accessToken ? <Navigate to="/home" /> : <Navigate to="/auth" />} />
+    <>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 2500,
 
-        <Route path="/auth" element={accessToken ? <Navigate to="/home" /> : <Auth />} />
+          style: {
+            background: '#111827',
+            color: '#fff',
+            border: '1px solid #374151',
+          },
 
-        <Route path="/home" element={accessToken ? <Home /> : <Navigate to="/auth" />} />
+          success: {
+            iconTheme: {
+              primary: '#22c55e',
+              secondary: '#fff',
+            },
+          },
 
-        <Route
-          path="/chat/:uuid"
-          element={accessToken ? <HomeWithUuid /> : <Navigate to="/auth" />}
-        />
-      </Routes>
-    </BrowserRouter>
+          error: {
+            iconTheme: {
+              primary: '#ef4444',
+              secondary: '#fff',
+            },
+          },
+        }}
+      />
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/"
+            element={accessToken ? <Navigate to="/home" /> : <Navigate to="/auth" />}
+          />
+
+          <Route path="/auth" element={accessToken ? <Navigate to="/home" /> : <Auth />} />
+
+          <Route path="/home" element={accessToken ? <Home /> : <Navigate to="/auth" />} />
+
+          <Route
+            path="/chat/:uuid"
+            element={accessToken ? <HomeWithUuid /> : <Navigate to="/auth" />}
+          />
+        </Routes>
+      </BrowserRouter>
+    </>
   )
 }
 

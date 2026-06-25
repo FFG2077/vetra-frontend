@@ -8,7 +8,7 @@ export const LoginForm = ({ onSwitchForm }) => {
     password: '',
   })
 
-  const { setAccessToken } = useAuthStore()
+  const { setTokens } = useAuthStore()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -16,7 +16,10 @@ export const LoginForm = ({ onSwitchForm }) => {
     try {
       const data = await login(loginData.email, loginData.password)
 
-      setAccessToken(data.access_token)
+      setTokens({
+        accessToken: data.access_token,
+        refreshToken: data.refresh_token,
+      })
     } catch (error) {
       console.error('Error occurred while logging in:', error)
     }

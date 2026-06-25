@@ -5,6 +5,7 @@ import RightSidebar from '../../layout/HomeLayout/RightPanel'
 import { useEffect } from 'react'
 import { get_me } from '../../../api/user'
 import { useAuthStore } from '../../../store/useAuthStore'
+import { SettingsOverlay } from '../../overlay/SettingsOverlay'
 
 const Home = (uuid) => {
   const setUser = useAuthStore((state) => state.setUser)
@@ -23,6 +24,8 @@ const Home = (uuid) => {
       <LeftSidebar />
       <MiddleSidebar />
       <RightSidebar uuid={uuid} />
+
+      <SettingsOverlay />
     </div>
   )
 }

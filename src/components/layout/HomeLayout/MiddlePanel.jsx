@@ -24,32 +24,33 @@ const MiddlePanel = () => {
 
   const filteredChats = useMemo(() => {
     return chatsArray.filter((chat) =>
-    (chat.name || '').toLowerCase().includes(search.toLowerCase())
-  )
+      (chat.name || '').toLowerCase().includes(search.toLowerCase()),
+    )
   }, [chats, search])
 
   return (
-    <div className="flex flex-col">
-      <div>
-        <h1 className="text-2xl">Chats</h1>
-        <input
-          className={`w-full p-2 border border-gray-500 rounded`}
-          placeholder="Search"
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
-      <div>
-        {filteredChats.map((chat) =>
-        (
-          <ChatLink
-            key={chat.public_id}
-            name={chat.name}
-            text={chat.is_group ? 'Group' : 'Direct'}
-            url={`/chat/${chat.public_id}`}
+    <div className="flex flex-col justify-between">
+      <div className="flex flex-col">
+        <div>
+          <h1 className="text-2xl">Chats</h1>
+          <input
+            className={`w-full p-2 border border-gray-500 rounded`}
+            placeholder="Search"
             onChange={(e) => setSearch(e.target.value)}
-            handleClick={() => setCurrentChat(chat)}
           />
-        ))}
+        </div>
+        <div>
+          {filteredChats.map((chat) => (
+            <ChatLink
+              key={chat.public_id}
+              name={chat.name}
+              text={chat.is_group ? 'Group' : 'Direct'}
+              url={`/chat/${chat.public_id}`}
+              onChange={(e) => setSearch(e.target.value)}
+              handleClick={() => setCurrentChat(chat)}
+            />
+          ))}
+        </div>
       </div>
     </div>
   )
