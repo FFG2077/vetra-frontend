@@ -6,9 +6,12 @@ import { useEffect } from 'react'
 import { get_me } from '../../../api/user'
 import { useAuthStore } from '../../../store/useAuthStore'
 import { SettingsOverlay } from '../../overlay/SettingsOverlay'
+import { FriendsPanel } from '../../layout/HomeLayout/FriendsPanel'
+import { useNavigationStore } from '../../../store/useNavigationStore'
 
 const Home = (uuid) => {
   const setUser = useAuthStore((state) => state.setUser)
+  const activePage = useNavigationStore((state) => state.activePage)
 
   useEffect(() => {
     const loadUser = async () => {
@@ -20,10 +23,25 @@ const Home = (uuid) => {
   }, [])
 
   return (
-    <div className="grid grid-cols-[1fr_2fr_5fr] w-full h-full mt-4 ml-4 mr-4 gap-4">
-      <LeftSidebar />
-      <MiddleSidebar />
-      <RightSidebar uuid={uuid} />
+    <div className="flex w-full h-full mt-4 ml-4 mr-4 gap-4 overflow-hidden">
+      <LeftSidebar className="basis-64 lg:basis-80 shrink min-w-[220px]"/>
+
+      {activePage === 'chats' && (
+        <>
+          <div className="flex-[2] min-w-0">
+            <MiddleSidebar className="flex-1 min-w-0"/>
+          </div>
+          <div className="flex-[5] min-w-0">
+            <RightSidebar className="basis-[420px] shrink min-w-[300px]" uuid={uuid} />
+          </div>
+        </>
+      )}
+
+      {activePage === 'friends' && (
+        <div className="flex-1 min-w-0">
+          <FriendsPanel />
+        </div>
+      )}
 
       <SettingsOverlay />
     </div>

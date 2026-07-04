@@ -8,6 +8,7 @@ import { useAuthStore } from '../../../store/useAuthStore'
 
 import { copyToClipboard } from '../../../utils/copy'
 import { useSettingsStore } from '../../../store/useSettingsStore'
+import { useNavigationStore } from '../../../store/useNavigationStore'
 
 const LeftPanel = ({ className = '' }) => {
   const public_id = useAuthStore((state) => state.public_id)
@@ -16,8 +17,10 @@ const LeftPanel = ({ className = '' }) => {
 
   const toggle = useSettingsStore((state) => state.toggle)
 
+  const setActivePage = useNavigationStore((state) => state.setActivePage)
+
   return (
-    <div className={`min-h-screen w-full md:w-40 lg:w-80 flex flex-col p-4 sm:p-2 ${className}`}>
+    <div className={`min-h-screen w-64 lg:w-80 flex flex-col p-4 sm:p-2 ${className}`}>
       <Link to="/home" className="inline-flex items-center gap-2">
         <h1 className="text-3xl">Vetra</h1>
         <span className="bg-blue-500 text-white px-2 py-1 rounded">BETA</span>
@@ -25,8 +28,12 @@ const LeftPanel = ({ className = '' }) => {
 
       <div className="flex flex-col flex-1 text-center sm:text-left">
         <div className="flex mt-12 flex-col gap-3">
-          <LeftLink url="/home">Chats</LeftLink>
-          <LeftLink url="/friends">Friends</LeftLink>
+          <div onClick={() => setActivePage('chats')}>
+            <LeftLink url="/home">Chats</LeftLink>
+          </div>
+          <div onClick={() => setActivePage('friends')}>
+            <LeftLink url="/friends">Friends</LeftLink>
+          </div>
         </div>
 
         <div className="mt-auto mb-6 text-center">
@@ -42,7 +49,11 @@ const LeftPanel = ({ className = '' }) => {
       <div className="flex mb-10 w-full bg-gray-900 rounded-2xl px-4 py-3 shadow-sm flex-col">
         <div className="text-white flex justify-between items-center mb-1">
           <span className="text-2xl">{name}</span>
-          <IoSettingsOutline onClick={toggle} size={24} className="cursor-pointer hover:text-gray-300" />
+          <IoSettingsOutline
+            onClick={toggle}
+            size={24}
+            className="cursor-pointer hover:text-gray-300"
+          />
         </div>
         <div className="flex w-full justify-between">
           <span

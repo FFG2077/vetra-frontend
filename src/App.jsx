@@ -65,6 +65,7 @@ const App = () => {
             path="/chat/:uuid"
             element={accessToken ? <HomeWithUuid /> : <Navigate to="/auth" />}
           />
+          <Route path="/friends" element={accessToken ? <Home /> : <Navigate to="/auth" />}/>
         </Routes>
       </BrowserRouter>
     </>
