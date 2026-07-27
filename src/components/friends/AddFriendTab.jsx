@@ -6,6 +6,8 @@ export const AddFriendTab = () => {
   const [public_id, setPublicId] = useState('')
 
   const handleAdd = () => {
+    if (!public_id) return toast.error('Please enter a public ID.')
+
     useFriendsStore.getState().sendRequest(public_id)
     setPublicId('')
     toast.success('Friend request sent!')
