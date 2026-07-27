@@ -7,7 +7,7 @@ export const FriendSelector = ({
   removeUser,
 }) => {
   const filteredFriends = friends.filter((friend) =>
-    friend.username.toLowerCase().includes(search.toLowerCase()),
+    friend.name.toLowerCase().includes(search.toLowerCase()),
   )
   const selectedIds = new Set(selectedUsers.map((u) => u.public_id))
 
@@ -16,7 +16,7 @@ export const FriendSelector = ({
       <div className="border rounded p-2 flex flex-wrap gap-2">
         {selectedUsers.map((user) => (
           <div key={user.public_id} className="bg-gray-800/50 rounded px-2 py-1">
-            {user.username}
+            {user.name}
             <button
               onClick={() => removeUser(user.public_id)}
               className="ml-2 hover:text-gray-500 bg-gray-700/50 rounded px-1 cursor-pointer"
@@ -52,7 +52,7 @@ export const FriendSelector = ({
                 setSearch('')
               }}
             >
-              {friend.username}
+              {friend.name}
               <div>
                 <input
                   type="checkbox"

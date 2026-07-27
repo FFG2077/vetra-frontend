@@ -3,6 +3,9 @@ import { useState, useEffect } from 'react'
 import { GroupNameInput } from './GroupNameInput'
 import { FriendSelector } from './FriendSelector'
 import { useFriendsStore } from '../../../store/useFriendsStore'
+import { createDirectChat, createGroupChat, getChats } from '../../../api/chats'
+import toast from 'react-hot-toast'
+import { useChatStore } from '../../../store/useChatStore'
 
 export default function CreateChatDialog({ open, onOpenChange }) {
   const [selectedUsers, setSelectedUsers] = useState([])
@@ -34,6 +37,33 @@ export default function CreateChatDialog({ open, onOpenChange }) {
     setSelectedUsers((prev) => prev.filter((user) => user.public_id !== publicId))
   }
 
+  const handleCreateChat = async () => {
+    const setChats = useChatStore.getState().setChats
+
+    if (selectedUsers.length === 0) {
+      return toast.error('Please select at least one user to create a chat.')
+    }
+    
+    try {
+      if (selectedUsers.length === 1) {
+        await createDirectChat(selectedUsers[0].public_id)
+
+        toast.success('direct chat created')
+      } else {
+        await createGroupChat(groupName, selectedUsers.map((user) => user.public_id))
+        toast.success('group chat created')
+      }
+    } catch (error) {
+      toast.error('Failed to create chat. Please try again.')
+      console.error('Error creating chat:', error)
+    }
+
+    const chats = await getChats()
+    setChats(chats)
+
+    onOpenChange(false)
+  }
+
   return (
     <AppDialog open={open} onOpenChange={onOpenChange} title="Create chat">
       <FriendSelector
@@ -53,7 +83,7 @@ export default function CreateChatDialog({ open, onOpenChange }) {
         >
           Cancel
         </button>
-        <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+        <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" onClick={() => handleCreateChat()}>
           {selectedUsers.length > 1 ? 'Create Group Chat' : 'Create Direct Chat'}
         </button>
       </div>
