@@ -50,6 +50,7 @@ export default function CreateChatDialog({ open, onOpenChange }) {
 
         toast.success('direct chat created')
       } else {
+        console.log(selectedUsers.map((user) => user.public_id))
         await createGroupChat(groupName, selectedUsers.map((user) => user.public_id))
         toast.success('group chat created')
       }

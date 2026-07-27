@@ -35,17 +35,19 @@ const MiddlePanel = () => {
     <>
       <CreateChatDialog open={isCreateChatOpen} onOpenChange={setIsCreateChatOpen} />
 
-      <div className="min-h-screen flex flex-col justify-between">
-        <div className="flex flex-col">
+      <div className="h-screen flex flex-col">
+        {/* <div className="flex flex-col"> */}
+        <div className='p-2'>
           <div>
             <h1 className="text-2xl">Chats</h1>
             <input
-              className={`w-full p-2 border border-gray-500 rounded`}
+              className="w-full p-2 border border-gray-500 rounded"
               placeholder="Search"
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
-          <div>
+        </div>
+          <div className="flex-1 overflow-y-auto px-2">
             {filteredChats.length === 0 && (
               <div className="text-gray-500 text-center mt-4">No chats found.</div>
             )}
@@ -60,7 +62,6 @@ const MiddlePanel = () => {
               />
             ))}
           </div>
-        </div>
         <button
           className="mb-10 m-2 p-2 border rounded cursor-pointer"
           onClick={() => setIsCreateChatOpen(true)}
