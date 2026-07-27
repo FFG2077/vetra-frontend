@@ -131,7 +131,7 @@ const RightPanel = ({ uuid }) => {
           </div>
         </div>
 
-        <div className="border-t border-gray-700 p-4 md:p-6 bg-[#0B0C14]">
+        <div className="border-t border-gray-700 p-4 md:p-6 bg-[#0B0C14] mb-5">
           <div className="flex gap-3">
             <input
               type="text"

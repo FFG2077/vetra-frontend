@@ -55,8 +55,7 @@ export default function CreateChatDialog({ open, onOpenChange }) {
         toast.success('group chat created')
       }
     } catch (error) {
-      toast.error('Failed to create chat. Please try again.')
-      console.error('Error creating chat:', error)
+      toast.error(error.response?.data?.detail ?? 'Failed to create chat')
     }
 
     const chats = await getChats()

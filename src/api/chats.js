@@ -11,22 +11,13 @@ export const getChats = async () => {
 }
 
 export const createDirectChat = async (friend_uuid) => {
-  try {
-    const response = await api.post('/chat/create_direct_chat', null, { params: { friend_uuid } })
+  const response = await api.post('/chat/create_direct_chat', null, { params: { friend_uuid } })
 
-    return response.data
-  } catch (error) {
-    console.error(error)
-  }
+  return response.data
 }
 
 export const createGroupChat = async (name, members) => {
-  try {
-    // const response = await api.post('/chat/create_group_chat', null, { params: { name, members } })
-    const response = await api.post('/chat/create_group_chat', { name, member_uuids: members })
+  const response = await api.post('/chat/create_group_chat', { name, member_uuids: members })
 
-    return response.data
-  } catch (error) {
-    console.error(error)
-  }
+  return response.data
 }
