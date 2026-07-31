@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 // const navigate = useNavigate()
 
 export const api = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api/v1',
+  baseURL: import.meta.env.VITE_API_URL,
   timeout: 10000,
 })
 
@@ -32,7 +32,7 @@ api.interceptors.response.use(
       try {
         const refreshToken = useAuthStore.getState().refreshToken
 
-        const response = await axios.post('http://127.0.0.1:8000/api/v1/users/refresh', {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/users/refresh`, {
           refresh_token: refreshToken,
         })
 
