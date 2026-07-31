@@ -5,4 +5,12 @@ services:
     
     ports:
       - "80:80"
+
+    networks:
+      - vetra_network
+
     restart: unless-stopped
+
+networks:
+  vetra_network:
+    external: true
