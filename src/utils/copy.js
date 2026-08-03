@@ -4,10 +4,23 @@ export const copyToClipboard = async (text) => {
   if (!text) return
 
   try {
-    await navigator.clipboard.writeText(text)
+    if (navigator.clipboard) {
+      await navigator.clipboard.writeText(text)
+    } else {
+      const textarea = document.createElement('textarea')
+      textarea.value = text
 
-		toast.success('Copied to clipboard')
+      document.body.appendChild(textarea)
+      textarea.select()
+
+      document.execCommand('copy')
+
+      textarea.remove()
+    }
+
+    toast.success('Copied to clipboard')
   } catch (e) {
-		toast.error('Copy failed')
+    console.log(e)
+    toast.error('Copy failed')
   }
 }
