@@ -5,11 +5,17 @@ import { useChatStore } from '../../../store/useChatStore'
 import { useEffect, useState, useMemo } from 'react'
 import { getChats } from '../../../api/chats'
 import CreateChatDialog from '../../ui/dialog/CreateChatDialog'
+import { useNavigationStore } from '../../../store/useNavigationStore'
+
+import { FiAlignLeft } from 'react-icons/fi'
 
 const MiddlePanel = () => {
   const chats = useChatStore((state) => state.chats)
   const setChats = useChatStore((state) => state.setChats)
   const setCurrentChat = useChatStore((state) => state.setCurrentChat)
+
+  const openMobileChat = useNavigationStore((state) => state.openMobileChat)
+  const openMobileMenu = useNavigationStore((state) => state.openMobileMenu)
 
   const [search, setSearch] = useState('')
 
@@ -37,9 +43,14 @@ const MiddlePanel = () => {
 
       <div className="h-screen flex flex-col">
         {/* <div className="flex flex-col"> */}
-        <div className='p-2'>
+        <div className="p-2">
           <div>
-            <h1 className="text-2xl">Chats</h1>
+            <div className="flex items-center gap-2 mb-2">
+              <button className="lg:hidden p-2 rounded hover:bg-gray-700 transition-colors" onClick={() => openMobileMenu()}>
+                <FiAlignLeft className="text-3xl"/>
+              </button>
+              <h1 className="text-2xl">Chats</h1>
+            </div>
             <input
               className="w-full p-2 border border-gray-500 rounded"
               placeholder="Search"
@@ -47,21 +58,24 @@ const MiddlePanel = () => {
             />
           </div>
         </div>
-          <div className="flex-1 overflow-y-auto px-2">
-            {filteredChats.length === 0 && (
-              <div className="text-gray-500 text-center mt-4">No chats found.</div>
-            )}
-            {filteredChats.map((chat) => (
-              <ChatLink
-                key={chat.public_id}
-                name={chat.name}
-                text={chat.is_group ? 'Group' : 'Direct'}
-                url={`/chat/${chat.public_id}`}
-                onChange={(e) => setSearch(e.target.value)}
-                handleClick={() => setCurrentChat(chat)}
-              />
-            ))}
-          </div>
+        <div className="flex-1 overflow-y-auto px-2">
+          {filteredChats.length === 0 && (
+            <div className="text-gray-500 text-center mt-4">No chats found.</div>
+          )}
+          {filteredChats.map((chat) => (
+            <ChatLink
+              key={chat.public_id}
+              name={chat.name}
+              text={chat.is_group ? 'Group' : 'Direct'}
+              url={`/chat/${chat.public_id}`}
+              onChange={(e) => setSearch(e.target.value)}
+              handleClick={() => {
+                setCurrentChat(chat)
+                openMobileChat()
+              }}
+            />
+          ))}
+        </div>
         <button
           className="mb-10 m-2 p-2 border rounded cursor-pointer"
           onClick={() => setIsCreateChatOpen(true)}

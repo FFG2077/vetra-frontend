@@ -10,6 +10,8 @@ import { copyToClipboard } from '../../../utils/copy'
 import { useSettingsStore } from '../../../store/useSettingsStore'
 import { useNavigationStore } from '../../../store/useNavigationStore'
 
+import { FiX } from 'react-icons/fi'
+
 const LeftPanel = ({ className = '' }) => {
   const public_id = useAuthStore((state) => state.public_id)
   const short_public_id = public_id ? public_id.slice(0, 8) : ''
@@ -17,13 +19,32 @@ const LeftPanel = ({ className = '' }) => {
 
   const toggle = useSettingsStore((state) => state.toggle)
 
+  // navigation
   const setActivePage = useNavigationStore((state) => state.setActivePage)
+  const closeMobileMenu = useNavigationStore((state) => state.closeMobileMenu)
 
   return (
-    <div className={`min-h-screen w-64 lg:w-80 flex flex-col p-4 sm:p-2 ${className}`}>
-      <Link to="/home" className="inline-flex items-center gap-2">
-        <h1 className="text-3xl">Vetra</h1>
-        <span className="bg-blue-500 text-white px-2 py-1 rounded">BETA</span>
+    <div
+      className={`
+      min-h-screen
+      w-64
+      lg:w-80
+      flex
+      flex-col
+      p-4
+      sm:p-2
+      bg-[#0B0C14]
+      ${className}
+    `}
+    >
+      <Link to="/home" className="inline-flex items-center gap-2 justify-between">
+        <div className="flex items-center gap-2">
+          <h1 className="text-3xl">Vetra</h1>
+          <span className="bg-blue-500 text-white px-2 py-1 rounded">BETA</span>
+        </div>
+        <button onClick={() => closeMobileMenu()} className="lg:hidden p-2 rounded hover:bg-gray-700 transition-colors">
+          <FiX className="text-3xl" />
+        </button>
       </Link>
 
       <div className="flex flex-col flex-1 text-center sm:text-left">

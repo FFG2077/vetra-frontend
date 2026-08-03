@@ -3,6 +3,9 @@ import { useAuthStore } from '../../../store/useAuthStore'
 import { useRef, useEffect, useState } from 'react'
 import { getMessages } from '../../../api/messages'
 import { chatSocket } from '../../../service/chatSocket'
+import { useNavigationStore } from '../../../store/useNavigationStore'
+
+import { FiArrowLeft } from 'react-icons/fi'
 
 const RightPanel = ({ uuid }) => {
   // messages
@@ -90,7 +93,7 @@ const RightPanel = ({ uuid }) => {
         public_id: Date.now().toString(),
         content: data.content,
         user_name: data.sender_name,
-        user_uuid: data.sender_id
+        user_uuid: data.sender_id,
       })
     }
 
@@ -105,17 +108,26 @@ const RightPanel = ({ uuid }) => {
   const user_name = useAuthStore((state) => state.name)
   const user_uuid = useAuthStore((state) => state.uuid)
 
+  // mobile navigation
+  const closeMobileChat = useNavigationStore((state) => state.closeMobileChat)
+
   if (chat_uuid) {
     return (
       <div className="flex flex-col h-screen bg-[#0B0C14] text-white font-sans">
-        <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-700 bg-[#0B0C14]">
+        <div className="flex items-center justify-between p-4 lg:p-6 border-b border-gray-700 bg-[#0B0C14]">
           <div className="flex items-center gap-3">
-            <h1 className="text-xl md:text-2xl font-semibold">{chats[chat_uuid]?.name}</h1>
+            <button
+              onClick={closeMobileChat}
+              className="lg:hidden p-2 rounded hover:bg-gray-700 transition-colors"
+            >
+              <FiArrowLeft className="text-3xl" />
+            </button>
+            <h1 className="text-xl lg:text-2xl font-semibold">{chats[chat_uuid]?.name}</h1>
           </div>
         </div>
 
         <div
-          className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 bg-[#0B0C14]"
+          className="flex-1 overflow-y-auto p-4 lg:p-6 space-y-4 bg-[#0B0C14]"
           ref={messagesRef}
           onScroll={handleScroll}
         >

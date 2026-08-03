@@ -11,7 +11,8 @@ import { useNavigationStore } from '../../../store/useNavigationStore'
 
 const Home = (uuid) => {
   const setUser = useAuthStore((state) => state.setUser)
-  const activePage = useNavigationStore((state) => state.activePage)
+  // const activePage = useNavigationStore((state) => state.activePage)
+  const { activePage, isMobileMenuOpen, isMobileChatOpen, closeMobileMenu } = useNavigationStore()
 
   useEffect(() => {
     const loadUser = async () => {
@@ -23,16 +24,73 @@ const Home = (uuid) => {
   }, [])
 
   return (
-    <div className="flex w-full h-full mt-4 ml-4 mr-4 gap-4 overflow-hidden">
-      <LeftSidebar className="basis-64 lg:basis-80 shrink min-w-[220px]"/>
+    <div
+      className="
+        flex
+        h-dvh
+        overflow-hidden
+        p-2
+        md:p-4
+        gap-2
+        md:gap-4
+        "
+    >
+      {isMobileMenuOpen && (
+        <div
+          className="
+          fixed
+          inset-0
+          bg-black/50
+          z-40
+        lg:hidden
+        "
+          onClick={closeMobileMenu}
+        />
+      )}
+
+      <div
+        className={`
+        fixed
+        z-50
+
+        ${isMobileMenuOpen ? 'block' : 'hidden'}
+
+        lg:block
+        lg:static
+        `}
+      >
+        <LeftSidebar />
+      </div>
 
       {activePage === 'chats' && (
         <>
-          <div className="flex-[2] min-w-0">
-            <MiddleSidebar className="flex-1 min-w-0"/>
+          {/* <div className="flex-[2] min-w-0">
+            <MiddleSidebar className="flex-1 min-w-0" />
           </div>
           <div className="flex-[5] min-w-0">
             <RightSidebar className="basis-[420px] shrink min-w-[300px]" uuid={uuid} />
+          </div> */}
+          <div
+            className={`
+            flex-1
+
+            ${isMobileChatOpen ? 'hidden' : 'block'}
+
+            lg:block
+          `}
+          >
+            <MiddleSidebar />
+          </div>
+          <div
+            className={`
+            flex-1
+
+            ${isMobileChatOpen ? 'block' : 'hidden'}
+
+            lg:block
+        `}
+          >
+            <RightSidebar uuid={uuid} />
           </div>
         </>
       )}
