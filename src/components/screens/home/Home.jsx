@@ -9,7 +9,7 @@ import { SettingsOverlay } from '../../overlay/SettingsOverlay'
 import { FriendsPanel } from '../../layout/HomeLayout/FriendsPanel'
 import { useNavigationStore } from '../../../store/useNavigationStore'
 
-const Home = (uuid) => {
+const Home = ({ uuid }) => {
   const setUser = useAuthStore((state) => state.setUser)
   // const activePage = useNavigationStore((state) => state.activePage)
   const { activePage, isMobileMenuOpen, isMobileChatOpen, closeMobileMenu } = useNavigationStore()

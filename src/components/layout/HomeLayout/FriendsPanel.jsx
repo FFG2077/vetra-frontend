@@ -15,16 +15,15 @@ export const FriendsPanel = () => {
   const [activeTab, setActiveTab] = useState('my')
   const openMobileMenu = useNavigationStore((state) => state.openMobileMenu)
 
+  // Load friends when the active tab changes
+  const loadFriends = useFriendsStore((state) => state.loadFriends)
+  const loadIncoming = useFriendsStore((state) => state.loadIncoming)
+  const loadOutgoing = useFriendsStore((state) => state.loadOutgoing)
+
   useEffect(() => {
-    if (activeTab === 'my') {
-      useFriendsStore.getState().loadFriends()
-    }
-    if (activeTab === 'incoming') {
-      useFriendsStore.getState().loadIncoming()
-    }
-    if (activeTab === 'outgoing') {
-      useFriendsStore.getState().loadOutgoing()
-    }
+    if (activeTab === 'my') loadFriends()
+    if (activeTab === 'incoming') loadIncoming()
+    if (activeTab === 'outgoing') loadOutgoing()
   }, [activeTab])
 
   return (
@@ -34,7 +33,7 @@ export const FriendsPanel = () => {
           onClick={openMobileMenu}
           className="lg:hidden p-2 rounded hover:bg-gray-700 transition-colors"
         >
-          <FiAlignLeft className="text-3xl"/>
+          <FiAlignLeft className="text-3xl" />
         </button>
         <h1 className="text-2xl">Friends</h1>
       </div>

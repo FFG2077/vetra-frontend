@@ -46,8 +46,11 @@ const MiddlePanel = () => {
         <div className="p-2">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <button className="lg:hidden p-2 rounded hover:bg-gray-700 transition-colors" onClick={() => openMobileMenu()}>
-                <FiAlignLeft className="text-3xl"/>
+              <button
+                className="lg:hidden p-2 rounded hover:bg-gray-700 transition-colors"
+                onClick={openMobileMenu}
+              >
+                <FiAlignLeft className="text-3xl" />
               </button>
               <h1 className="text-2xl">Chats</h1>
             </div>
