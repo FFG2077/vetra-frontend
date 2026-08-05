@@ -9,7 +9,7 @@ import { FiArrowLeft } from 'react-icons/fi'
 
 const RightPanel = ({ uuid }) => {
   // messages
-  const chat_uuid = uuid?.uuid
+  const chat_uuid = uuid
   const chats = useChatStore((state) => state.chats)
   const addMessage = useChatStore((state) => state.addMessage)
   const setMessages = useChatStore((state) => state.setMessages)
@@ -78,6 +78,12 @@ const RightPanel = ({ uuid }) => {
 
     chatSocket.handshake(chat_uuid)
 
+    const handlerReconnect = () => {
+      chatSocket.handshake(chat_uuid)
+    }
+
+    chatSocket.on('connected', handlerReconnect)
+
     const loadMessages = async () => {
       const messages = await getMessages(chat_uuid)
 
@@ -85,6 +91,10 @@ const RightPanel = ({ uuid }) => {
     }
 
     loadMessages()
+
+    return () => {
+      chatSocket.off('connected', handlerReconnect)
+    }
   }, [chat_uuid])
 
   useEffect(() => {
@@ -100,7 +110,7 @@ const RightPanel = ({ uuid }) => {
     chatSocket.on('message.new', handler)
 
     return () => {
-      chatSocket.off('message.new')
+      chatSocket.off('message.new', handler)
     }
   }, [chat_uuid])
 
@@ -172,6 +182,10 @@ const RightPanel = ({ uuid }) => {
   } else {
     return (
       <div className="flex min-h-screen justify-center items-center bg-[#0B0C14] text-white">
+        <button
+          onClick={closeMobileChat}
+          className="lg:hidden p-2 rounded hover:bg-gray-700 transition-colors"
+        ></button>
         <p className="text-2xl w-56 h-12 text-center bg-gray-800 rounded-2xl border border-gray-700 flex items-center justify-center">
           Select the chat
         </p>
