@@ -184,8 +184,10 @@ const RightPanel = ({ uuid }) => {
       <div className="flex min-h-screen justify-center items-center bg-[#0B0C14] text-white">
         <button
           onClick={closeMobileChat}
-          className="lg:hidden p-2 rounded hover:bg-gray-700 transition-colors"
-        ></button>
+          className="absolute top-4 left-4 lg:hidden p-2 rounded hover:bg-gray-700 transition-colors"
+        >
+          <FiArrowLeft className="text-3xl" />
+        </button>
         <p className="text-2xl w-56 h-12 text-center bg-gray-800 rounded-2xl border border-gray-700 flex items-center justify-center">
           Select the chat
         </p>
