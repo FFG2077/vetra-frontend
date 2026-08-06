@@ -1,13 +1,15 @@
 class ChatSocket {
   socket = null
   token = null
-  listeners = {}
+  listeners = new Map()
   handshakedChats = new Set()
 
   reconnectAttempts = 0
   reconnectTimer = null
   heartbeatInterval = null
   manualDisconnect = false
+  isAuthenticated = false
+  pendingHandshakes = new Set()
 
   connect(token) {
     if (this.socket) return
@@ -23,10 +25,6 @@ class ChatSocket {
 
       this.send({ event: 'auth', data: { token: this.token } })
       this.startHeartbeat()
-
-      // Notify listeners that the socket is connected
-      const handlers = this.listeners['connected']
-      if (handlers) handlers.forEach((h) => h())
     }
 
     this.socket.onmessage = (event) => {
@@ -34,7 +32,31 @@ class ChatSocket {
       try {
         const msg = JSON.parse(event.data)
 
-        const handlers = this.listeners[msg.event]
+        // Handle authentication success
+        if (msg.event === 'auth.ok') {
+          this.isAuthenticated = true
+
+          // If there are any pending handshakes, send them now
+          this.pendingHandshakes.forEach((uuid) => {
+            this.send({
+              event: 'message.handshake',
+              data: { chat_uuid: uuid },
+            })
+          })
+          this.pendingHandshakes.clear()
+          
+          // Notify listeners that the socket is connected
+          const connectedHandlers = this.listeners.get('connected')
+          if (connectedHandlers) connectedHandlers.forEach((h) => h())
+
+          // notify listeners that the socket is authenticated
+          const handlers = this.listeners.get(msg.event)
+          if (handlers) handlers.forEach((h) => h(msg.data))
+
+          return
+        }
+
+        const handlers = this.listeners.get(msg.event)
         if (handlers) handlers.forEach((h) => h(msg.data))
       } catch (e) {
         console.error('WS parse error: ', e)
@@ -42,8 +64,10 @@ class ChatSocket {
     }
 
     this.socket.onclose = (event) => {
+      // two sockets; only the current one should mutate state
       if (this.socket !== socket) return // Ignore if the socket has changed (e.g., due to a reconnect)
       console.log('CLOSE CODE:', event.code, 'REASON:', event.reason)
+      this.isAuthenticated = false
       this.stopHeartbeat()
       this.socket = null
       this.handshakedChats.clear()
@@ -85,11 +109,17 @@ class ChatSocket {
   handshake(chatUuid) {
     if (this.handshakedChats.has(chatUuid)) return
 
+    this.handshakedChats.add(chatUuid)
+
+    if (!this.isAuthenticated) {
+      this.pendingHandshakes.add(chatUuid)
+      return
+    }
+
     this.send({
       event: 'message.handshake',
       data: { chat_uuid: chatUuid },
     })
-    this.handshakedChats.add(chatUuid)
   }
 
   sendMessage(chatUuid, content) {
@@ -103,20 +133,27 @@ class ChatSocket {
   }
 
   on(event, handler) {
-    if (!this.listeners[event]) {
-      this.listeners[event] = []
+    if (!this.listeners.has(event)) {
+      this.listeners.set(event, [])
     }
 
-    this.listeners[event].push(handler)
+    this.listeners.get(event).push(handler)
   }
 
   off(event, handler) {
-    if (!this.listeners[event]) return
-    this.listeners[event] = this.listeners[event].filter((h) => h !== handler)
+    const handlers = this.listeners.get(event)
+
+    if (!handlers) return
+    this.listeners.set(
+      event,
+      handlers.filter((h) => h !== handler),
+    )
   }
 
   disconnect() {
     this.manualDisconnect = true
+    this.isAuthenticated = false
+    this.pendingHandshakes.clear()
     clearTimeout(this.reconnectTimer)
     this.stopHeartbeat()
     this.socket?.close()
