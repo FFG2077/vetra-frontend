@@ -37,15 +37,18 @@ const LeftPanel = ({ className = '' }) => {
       ${className}
     `}
     >
-      <Link to="/home" className="inline-flex items-center gap-2 justify-between">
-        <div className="flex items-center gap-2">
+      <div className="inline-flex items-center gap-2 justify-between">
+        <Link to="/home" className="flex items-center gap-2">
           <h1 className="text-3xl">Vetra</h1>
           <span className="bg-blue-500 text-white px-2 py-1 rounded">BETA</span>
-        </div>
-        <button onClick={closeMobileMenu} className="lg:hidden p-2 rounded hover:bg-gray-700 transition-colors">
+        </Link>
+        <button
+          onClick={closeMobileMenu}
+          className="lg:hidden p-2 rounded hover:bg-gray-700 transition-colors"
+        >
           <FiX className="text-3xl" />
         </button>
-      </Link>
+      </div>
 
       <div className="flex flex-col flex-1 text-center sm:text-left">
         <div className="flex mt-12 flex-col gap-3">
