@@ -38,7 +38,7 @@ const LeftPanel = ({ className = '' }) => {
     `}
     >
       <div className="inline-flex items-center gap-2 justify-between">
-        <Link to="/home" className="flex items-center gap-2">
+        <Link to="/home" onClick={() => setActivePage('chats')} className="flex items-center gap-2">
           <h1 className="text-3xl">Vetra</h1>
           <span className="bg-blue-500 text-white px-2 py-1 rounded">BETA</span>
         </Link>
