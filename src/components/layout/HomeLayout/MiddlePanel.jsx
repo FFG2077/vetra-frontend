@@ -41,7 +41,7 @@ const MiddlePanel = () => {
     <>
       <CreateChatDialog open={isCreateChatOpen} onOpenChange={setIsCreateChatOpen} />
 
-      <div className="h-screen flex flex-col">
+      <div className="h-dvh flex flex-col">
         {/* <div className="flex flex-col"> */}
         <div className="p-2">
           <div>

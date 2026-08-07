@@ -26,7 +26,7 @@ const LeftPanel = ({ className = '' }) => {
   return (
     <div
       className={`
-      min-h-screen
+      min-h-dvh
       w-64
       lg:w-80
       flex

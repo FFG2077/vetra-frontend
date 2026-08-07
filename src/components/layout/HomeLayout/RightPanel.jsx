@@ -123,7 +123,7 @@ const RightPanel = ({ uuid }) => {
 
   if (chat_uuid) {
     return (
-      <div className="flex flex-col h-screen bg-[#0B0C14] text-white font-sans">
+      <div className="flex flex-col h-dvh bg-[#0B0C14] text-white font-sans">
         <div className="flex items-center justify-between p-4 lg:p-6 border-b border-gray-700 bg-[#0B0C14]">
           <div className="flex items-center gap-3">
             <button
@@ -153,7 +153,7 @@ const RightPanel = ({ uuid }) => {
           </div>
         </div>
 
-        <div className="border-t border-gray-700 p-4 md:p-6 bg-[#0B0C14] mb-5">
+        <div className="border-t border-gray-700 p-4 md:p-6 bg-[#0B0C14] pb-[max(20px,env(safe-area-inset-bottom))] mb-5">
           <div className="flex gap-3">
             <input
               type="text"
@@ -181,7 +181,7 @@ const RightPanel = ({ uuid }) => {
     )
   } else {
     return (
-      <div className="flex min-h-screen justify-center items-center bg-[#0B0C14] text-white">
+      <div className="flex min-h-dvh justify-center items-center bg-[#0B0C14] text-white">
         <button
           onClick={closeMobileChat}
           className="absolute top-4 left-4 lg:hidden p-2 rounded hover:bg-gray-700 transition-colors"
