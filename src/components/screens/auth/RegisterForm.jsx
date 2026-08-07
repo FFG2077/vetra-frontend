@@ -10,15 +10,23 @@ export const RegisterForm = ({ onSwitchForm }) => {
     confirmPassword: '',
   })
 
-  const { setAccessToken } = useAuthStore()
+  const { setTokens } = useAuthStore()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     try {
-      const data = await register(registerData.name, registerData.email, registerData.password, registerData.confirmPassword)
+      const data = await register(
+        registerData.name,
+        registerData.email,
+        registerData.password,
+        registerData.confirmPassword,
+      )
 
-      setAccessToken(data.access_token)
+      setTokens({
+        accessToken: data.access_token,
+        refreshToken: data.refresh_token,
+      })
     } catch (error) {
       console.error('Error registering user:', error)
     }
