@@ -12,8 +12,8 @@ export default function CreateChatDialog({ open, onOpenChange }) {
   const [search, setSearch] = useState('')
   const [groupName, setGroupName] = useState('')
 
-	const friends = useFriendsStore((state) => state.friends)
-	const loadFriends = useFriendsStore((state) => state.loadFriends)
+  const friends = useFriendsStore((state) => state.friends)
+  const loadFriends = useFriendsStore((state) => state.loadFriends)
 
   useEffect(() => {
     if (!open) return
@@ -43,25 +43,27 @@ export default function CreateChatDialog({ open, onOpenChange }) {
     if (selectedUsers.length === 0) {
       return toast.error('Please select at least one user to create a chat.')
     }
-    
+
     try {
       if (selectedUsers.length === 1) {
         await createDirectChat(selectedUsers[0].public_id)
 
         toast.success('direct chat created')
       } else {
-        console.log(selectedUsers.map((user) => user.public_id))
-        await createGroupChat(groupName, selectedUsers.map((user) => user.public_id))
+        await createGroupChat(
+          groupName,
+          selectedUsers.map((user) => user.public_id),
+        )
         toast.success('group chat created')
       }
+
+      const chats = await getChats()
+      setChats(chats)
+      onOpenChange(false)
+      
     } catch (error) {
       toast.error(error.response?.data?.detail ?? 'Failed to create chat')
     }
-
-    const chats = await getChats()
-    setChats(chats)
-
-    onOpenChange(false)
   }
 
   return (
@@ -83,7 +85,10 @@ export default function CreateChatDialog({ open, onOpenChange }) {
         >
           Cancel
         </button>
-        <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" onClick={() => handleCreateChat()}>
+        <button
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          onClick={() => handleCreateChat()}
+        >
           {selectedUsers.length > 1 ? 'Create Group Chat' : 'Create Direct Chat'}
         </button>
       </div>

@@ -40,4 +40,22 @@ export const useChatStore = create((set) => ({
         },
       }
     }),
+
+  renameChat: (chatUuid, newName) =>
+    set((state) => ({
+      chats: {
+        ...state.chats,
+        [chatUuid]: {
+          ...state.chats[chatUuid],
+          name: newName,
+        },
+      },
+    })),
+
+  deleteChat: (chatUuid, newName) =>
+    set((state) => {
+      const chats = { ...state.chats }
+      delete chats[chatUuid]
+      return { chats }
+    }),
 }))

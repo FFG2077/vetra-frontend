@@ -17,6 +17,7 @@ export default function AppDialog({ open, onOpenChange, title, children }) {
             -translate-y-1/2
             rounded-xl
             border
+            z-[101]
             border-gray-700
             bg-neutral-900
             p-6
