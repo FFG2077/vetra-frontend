@@ -1,4 +1,4 @@
-import AppDialog from './Dialog/Dialog'
+import AppDialog from './Dialog'
 
 export default function ConfirmDialog({
   open,

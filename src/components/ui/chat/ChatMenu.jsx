@@ -3,7 +3,7 @@ import { FiMoreVertical } from 'react-icons/fi'
 import toast from 'react-hot-toast'
 import AppDialog from '../dialog/Dialog'
 import { useState } from 'react'
-import ConfirmDialog from '../ConfirmDialog'
+import ConfirmDialog from '../dialog/ConfirmDialog'
 import { useChatStore } from '../../../store/useChatStore'
 
 export default function ChatMenu({ onRename, onDelete, chatName }) {

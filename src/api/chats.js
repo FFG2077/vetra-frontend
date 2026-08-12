@@ -43,3 +43,15 @@ export const deleteChat = async (chat_uuid) => {
     throw error
   }
 }
+
+export const inviteUser = async (user_uuid, chat_uuid) => {
+  try {
+    const response = await api.post('/chat/invite_user', null, {
+      params: { user_uuid, chat_uuid },
+    })
+
+    return response.data
+  } catch (error) {
+    throw error
+  }
+}

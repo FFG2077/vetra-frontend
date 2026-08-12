@@ -4,8 +4,9 @@ import { useRef, useEffect, useState } from 'react'
 import { getMessages } from '../../../api/messages'
 import { chatSocket } from '../../../service/chatSocket'
 import { useNavigationStore } from '../../../store/useNavigationStore'
+import AddUserDialog from '../../ui/dialog/AddUserDialog'
 
-import { FiArrowLeft } from 'react-icons/fi'
+import { FiArrowLeft, FiUserPlus } from 'react-icons/fi'
 
 const RightPanel = ({ uuid }) => {
   // messages
@@ -73,6 +74,7 @@ const RightPanel = ({ uuid }) => {
     }
   }, [chat_uuid])
 
+  // websocket
   useEffect(() => {
     if (!chat_uuid) return
 
@@ -121,10 +123,13 @@ const RightPanel = ({ uuid }) => {
   // mobile navigation
   const closeMobileChat = useNavigationStore((state) => state.closeMobileChat)
 
+  // add user
+  const [isAddUserOpen, setIsAddUserOpen] = useState(false)
+
   if (chat_uuid) {
     return (
       <div className="flex flex-col h-dvh bg-[#0B0C14] text-white font-sans">
-        <div className="flex items-center justify-between p-4 lg:p-6 border-b border-gray-700 bg-[#0B0C14]">
+        <div className="flex items-center justify-between p-2 lg:p-3 border-b border-gray-700 bg-[#0B0C14]">
           <div className="flex items-center gap-3">
             <button
               onClick={closeMobileChat}
@@ -133,6 +138,21 @@ const RightPanel = ({ uuid }) => {
               <FiArrowLeft className="text-3xl" />
             </button>
             <h1 className="text-xl lg:text-2xl font-semibold">{chats[chat_uuid]?.name}</h1>
+          </div>
+
+          <div>
+            {chats[chat_uuid].is_group == true && (
+              <div>
+                <button onClick={() => setIsAddUserOpen(true)}>
+                  <FiUserPlus className="text-2xl" />
+                </button>
+                <AddUserDialog
+                  open={isAddUserOpen}
+                  onOpenChange={setIsAddUserOpen}
+                  chat_uuid={chat_uuid}
+                />
+              </div>
+            )}
           </div>
         </div>
 
